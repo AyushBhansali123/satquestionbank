@@ -45,17 +45,23 @@ if uploaded_questions_file and uploaded_answers_file:
                 # Showing Question Screen
                 st.subheader(f"Question {st.session_state.q_index + 1} of {game.total_questions}")
 
-                question_image = game.current_image()
-                st.image(question_image, use_column_width=True)
+                left_col, right_col = st.columns([2, 1])  # 2/3 and 1/3 layout
 
-                # User input and instant submit
-                user_answer = st.text_input("✏️ Your Answer (A, B, C, D, etc.)", key=f"answer_{st.session_state.q_index}")
+                with left_col:
+                    # Big Question Image
+                    question_image = game.current_image()
+                    st.image(question_image, use_column_width=True)
 
-                if user_answer:  # As soon as there is input, we can show "Submit" button
-                    if st.button("✅ Check Answer"):
-                        game.submit_answer(user_answer)
+                with right_col:
+                    st.write("### ✏️ Your Answer:")
+                    user_answer = st.text_input("Enter A, B, C, or D", key=f"answer_{st.session_state.q_index}")
+
+                    if user_answer:  # Only show Check Answer if user typed something
+                        if st.button("✅ Check Answer"):
+                            game.submit_answer(user_answer)
 
         else:
+            # Finished game
             st.balloons()
             st.success(f"🏆 Finished! Your Final Score: {st.session_state.score}")
 
